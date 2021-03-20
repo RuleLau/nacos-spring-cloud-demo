@@ -1,0 +1,24 @@
+spring:
+  cloud:
+    nacos:
+      config:
+        server-addr: 127.0.0.1:8848
+        file-extension: yaml
+      discovery:
+        server-addr: 127.0.0.1:8848
+        register-enabled: true
+    sentinel:
+      transport:
+        port: 8179
+        dashboard: localhost:8080
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+      - id: provider-router
+        uri: lb://nacos-service-provider
+        predicates:
+          - Path=/config/**
+  application:
+    name: gateway

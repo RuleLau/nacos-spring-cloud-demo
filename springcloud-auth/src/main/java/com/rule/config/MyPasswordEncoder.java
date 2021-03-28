@@ -1,17 +1,13 @@
 package com.rule.config;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MyPasswordEncoder implements PasswordEncoder {
-    @Override
-    public String encode(CharSequence charSequence) {
-        return charSequence.toString();
-    }
+public class MyPasswordEncoder extends BCryptPasswordEncoder {
 
-    @Override
-    public boolean matches(CharSequence charSequence, String s) {
-        return s.equals(charSequence.toString());
+    public static void main(String[] args) {
+        MyPasswordEncoder myPasswordEncoder = new MyPasswordEncoder();
+        System.out.println(myPasswordEncoder.encode("secret_test"));
     }
 }

@@ -1,0 +1,6 @@
+server:
+  port: 9001
+  servlet:
+    session:
+      cookie:
+        name: OAUTH2-CLIENT_SESSIONID01

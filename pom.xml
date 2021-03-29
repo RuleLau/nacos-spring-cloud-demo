@@ -13,7 +13,8 @@
         <module>nacos-service-consumer</module>
         <module>springcloud-gateway</module>
         <module>springcloud-auth</module>
-        <module>springcloud-auth/oauth-client</module>
+        <module>oauth-client</module>
+        <module>oauth-client2</module>
     </modules>
 
     <parent>

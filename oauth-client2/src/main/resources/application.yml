@@ -1,0 +1,6 @@
+server:
+  port: 9002
+  servlet:
+    session:
+      cookie:
+        name: OAUTH2-CLIENT_SESSIONID1

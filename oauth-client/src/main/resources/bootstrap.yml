@@ -5,10 +5,11 @@ security:
       service-id: dev
       jwt:
         key-uri: ${oauth2-server-url}/oauth/token_key
+      token-info-uri: ${oauth2-server-url}/oauth/check_token
     client:
       user-authorization-uri: ${oauth2-server-url}/oauth/authorize
       access-token-uri: ${oauth2-server-url}/oauth/token
-      client-id: nacos-service-provider
+      client-id: oauth-client
       client-secret: secret_test
 spring:
   application:

@@ -1,8 +1,8 @@
 package com.rule.config;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.rule.entity.UserInfo;
-import com.rule.mapper.UserMapper;
+import com.rule.common.entity.UserInfo;
+import com.rule.common.mapper.UserMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;

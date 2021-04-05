@@ -12,11 +12,14 @@ import org.springframework.web.bind.annotation.*;
 @RefreshScope
 public class ConfigController {
 
-    @Value("${useLocalCache:false}")
+    @Value("${useLocalCache}")
     private boolean useLocalCache;
 
+    @Value("${spring.redis.host}")
+    private String host;
+
     @GetMapping("/get")
-    public boolean get() {
-        return useLocalCache;
+    public Object get() {
+        return host + useLocalCache;
     }
 }

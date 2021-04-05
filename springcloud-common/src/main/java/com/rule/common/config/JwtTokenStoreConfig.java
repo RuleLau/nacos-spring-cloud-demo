@@ -1,9 +1,9 @@
-package com.rule.config;
+package com.rule.common.config;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.rule.entity.UserInfo;
-import com.rule.mapper.UserMapper;
+import com.rule.common.entity.UserInfo;
+import com.rule.common.mapper.UserMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
@@ -19,6 +19,11 @@ import java.util.Map;
 
 @Configuration
 public class JwtTokenStoreConfig {
+
+    /**
+     * 秘钥串
+     */
+    private static final String SIGNING_KEY = "SigningKey";
 
     @Resource
     private UserMapper userMapper;
@@ -50,7 +55,7 @@ public class JwtTokenStoreConfig {
             }
         };
         // 测试用,资源服务使用相同的字符达到一个对称加密的效果,生产时候使用RSA非对称加密方式
-        accessTokenConverter.setSigningKey("SigningKey");
+        accessTokenConverter.setSigningKey(SIGNING_KEY);
         return accessTokenConverter;
     }
 

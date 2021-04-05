@@ -1,12 +1,16 @@
 package com.rule.controller;
 
-import com.rule.config.MyPasswordEncoder;
-import com.rule.entity.UserInfo;
-import com.rule.mapper.UserMapper;
+import com.rule.common.config.MyPasswordEncoder;
+import com.rule.common.entity.UserInfo;
+import com.rule.common.mapper.UserMapper;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;

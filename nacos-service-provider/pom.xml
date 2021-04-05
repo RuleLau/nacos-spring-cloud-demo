@@ -6,7 +6,6 @@
         <groupId>com.rule.demo</groupId>
         <artifactId>nacos-spring-cloud-demo</artifactId>
         <version>0.0.1-SNAPSHOT</version>
-        <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.rule</groupId>
     <artifactId>nacos-service-provider</artifactId>

@@ -53,9 +53,6 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.jdbc(dataSource).clients(clientDetailsService);
-//                inMemory().withClient("myapp").resourceIds(SOURCE_ID).authorizedGrantTypes("password", "refresh_token")
-//                .scopes("all").authorities("ADMIN").secret("lxapp").accessTokenValiditySeconds(ACCESS_TOKEN_TIMER)
-//                .refreshTokenValiditySeconds(REFRESH_TOKEN_TIMER);
     }
 
     @Override
@@ -69,23 +66,26 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 
     /**
      * 获取密钥需要身份验证，使用单点登陆时必须配置
+     *
      * @param security security
      */
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) {
+        // 使用单点登陆时必须配置
         security.tokenKeyAccess("isAuthenticated()");
+        // 不适用单点
+//        security
+//                .tokenKeyAccess("permitAll()")
+//                .checkTokenAccess("permitAll()")
+//                .allowFormAuthenticationForClients();
     }
-
-    //
-//    @Bean
-//    public TokenStore tokenStore() {
-//        return new RedisTokenStore(redisConnectionFactory);
-//    }
 
     @Bean
     public ClientDetailsService clientDetails() {
         return new JdbcClientDetailsService(dataSource);
     }
+
+
 
 }
 

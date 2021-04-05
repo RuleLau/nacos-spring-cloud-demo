@@ -1,15 +1,13 @@
-package com.rule.entity;
+package com.rule.common.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
-import java.io.Serializable;
-
 @Data
 @TableName(value = "t_user")
-public class UserInfo implements Serializable {
+public class UserInfo {
 
     @TableId(value = "ID", type = IdType.AUTO)
     private Integer id;

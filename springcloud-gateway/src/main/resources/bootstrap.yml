@@ -1,16 +1,14 @@
 spring:
+  application:
+    name: gateway
+  profiles:
+    include: common
   cloud:
     nacos:
       config:
-        server-addr: 127.0.0.1:8848
-        file-extension: yaml
-      discovery:
-        server-addr: 127.0.0.1:8848
-        register-enabled: true
-    sentinel:
-      transport:
-        port: 8179
-        dashboard: localhost:8080
+        shared-configs:
+          - data-id: common.yaml
+            refresh: true
     gateway:
       discovery:
         locator:
@@ -20,5 +18,14 @@ spring:
         uri: lb://nacos-service-provider
         predicates:
           - Path=/config/**
-  application:
-    name: gateway
+      - id: oauth-client
+        uri: lb://oauth-client
+        predicates:
+          - Path=/oauth-client/**
+      - id: springcloud-auth
+        uri: lb://springcloud-auth
+        predicates:
+          - Path=/auth/**
+        ### StripPrefix参数表示在将请求发送到下游之前从请求中剥离的路径个数。
+        filters:
+          - StripPrefix=1

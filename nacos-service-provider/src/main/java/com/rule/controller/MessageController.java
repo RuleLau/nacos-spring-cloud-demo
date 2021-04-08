@@ -31,13 +31,13 @@ public class MessageController {
      * 发送消息修改用户信息
      */
     @GetMapping("/send")
+    // @GlobalTransactional  配置全局的事务方案
     @GlobalTransactional
     public void sendMessage() {
         // 添加消息
         MessageInfo messageInfo = MessageInfo.builder().title("update user username")
                 .body("{\"id\":\"1\", \"username\":\"jarry\"}")
                 .type("send").build();
-
         messageMapper.insert(messageInfo);
         JSONObject body = JSON.parseObject(messageInfo.getBody());
         // 调用userClient 增加用户信息

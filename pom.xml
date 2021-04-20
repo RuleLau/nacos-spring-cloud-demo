@@ -16,6 +16,7 @@
         <module>springcloud-auth</module>
         <module>oauth-client</module>
         <module>oauth-client2</module>
+        <module>message-platform</module>
     </modules>
 
     <parent>

@@ -12,6 +12,29 @@ spring:
       transport:
         port: 8179
         dashboard: localhost:8080
+    # Spring Cloud Stream 配置项，对应 BindingServiceProperties 类
+    stream:
+      # Binding 配置项，对应 BindingProperties Map
+      bindings:
+        erbadagang-input:
+          destination: ERBADAGANG-TOPIC-01 # 目的地。这里使用 RocketMQ Topic
+          group: erbadagang-consumer-group-ERBADAGANG-TOPIC-01 # 消费者分组,命名规则：组名+topic名
+        trek-input:
+          destination: TREK-TOPIC-01 # 目的地。这里使用 RocketMQ Topic
+          group: trek-consumer-group-TREK-TOPIC-01 # 消费者分组,命名规则：组名+topic名
+      # Spring Cloud Stream RocketMQ 配置项
+      rocketmq:
+        # RocketMQ Binder 配置项，对应 RocketMQBinderConfigurationProperties 类
+        binder:
+          name-server: 127.0.0.1:9876 # RocketMQ Namesrv 地址
+        # RocketMQ 自定义 Binding 配置项，对应 RocketMQBindingProperties Map
+        bindings:
+          erbadagang-input:
+            # RocketMQ Consumer 配置项，对应 RocketMQConsumerProperties 类
+            consumer:
+              enabled: true # 是否开启消费，默认为 true
+              broadcasting: false # 是否使用广播消费，默认为 false 使用集群消费，如果要使用广播消费值设成true。
+
   application:
     name: nacos-service-consumer
   # 配置数据源

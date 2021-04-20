@@ -65,3 +65,11 @@ spring:
       #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
       # 解决oracle更新数据为null时无法转换报错，mysql不会出现此情况
       jdbc-type-for-null: 'null'
+    stream:
+      rocketmq:
+        binder:
+          name-server: 127.0.0.1:9876
+      bindings:
+        output:
+          # 指定topic
+          destination: stream-test-topic

@@ -1,21 +1,24 @@
+#server:
+#  port: 8082
+
 server:
-  port: 8082
-seata:
-  enabled: true
-  application-id: nacos-service-consumer
-  tx-service-group: my_test_tx_group
-  config:
-    type: nacos
-    nacos:
-      server-addr: 127.0.0.1:8848
-      group: SEATA_GROUP
-      username: ""
-      password: ""
-  registry:
-    type: nacos
-    nacos:
-      application: seata-server
-      server-addr: 127.0.0.1:8848
-      group : "SEATA_GROUP"
-      username: ""
-      password: ""
+  port: ${random.int[10000,19999]} # 随机端口，方便启动多个消费者
+#seata:
+#  enabled: true
+#  application-id: nacos-service-consumer
+#  tx-service-group: my_test_tx_group
+#  config:
+#    type: nacos
+#    nacos:
+#      server-addr: 127.0.0.1:8848
+#      group: SEATA_GROUP
+#      username: ""
+#      password: ""
+#  registry:
+#    type: nacos
+#    nacos:
+#      application: seata-server
+#      server-addr: 127.0.0.1:8848
+#      group : "SEATA_GROUP"
+#      username: ""
+#      password: ""

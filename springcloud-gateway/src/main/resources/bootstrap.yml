@@ -18,6 +18,10 @@ spring:
         uri: lb://nacos-service-provider
         predicates:
           - Path=/config/**
+      - id: consumer-router
+        uri: lb://nacos-service-consumer
+        predicates:
+          - Path=/test/**
       - id: oauth-client
         uri: lb://oauth-client
         predicates:

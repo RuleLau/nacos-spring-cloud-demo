@@ -17,6 +17,8 @@
         <module>oauth-client</module>
         <module>oauth-client2</module>
         <module>message-platform</module>
+        <module>nacos-component-consumer</module>
+        <module>nacos-component-provider</module>
     </modules>
 
     <parent>

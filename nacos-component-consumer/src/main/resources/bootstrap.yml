@@ -1,0 +1,24 @@
+spring:
+  cloud:
+    nacos:
+      config:
+        server-addr: 127.0.0.1:8848
+        file-extension: yaml
+        shared-configs:
+          - data-id: common.yaml
+      discovery:
+        server-addr: 127.0.0.1:8848
+  application:
+    name: nacos-component-consumer
+#feign:
+#  hystrix:
+#    enabled: true
+hystrix:
+  command:
+    default:  #default全局有效，service id指定应用有效
+      execution:
+        timeout:
+          enabled: true
+        isolation:
+          thread:
+            timeoutInMilliseconds: 3000 #断路器超时时间，默认1000ms

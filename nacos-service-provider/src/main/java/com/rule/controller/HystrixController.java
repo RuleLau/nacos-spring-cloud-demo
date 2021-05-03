@@ -1,6 +1,5 @@
 package com.rule.controller;
 
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,7 +15,7 @@ public class HystrixController {
      * @param id
      * @return
      */
-    @HystrixCommand(fallbackMethod = "TimeOutErrorHandler")
+//    @HystrixCommand(fallbackMethod = "TimeOutErrorHandler")
     @GetMapping(value = "/hystrixI/{id}")
     public String timeOutError(@PathVariable Integer id){
         try {

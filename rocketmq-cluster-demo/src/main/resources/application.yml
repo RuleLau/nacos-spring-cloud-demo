@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: rocketmq-demo
+rocketmq:
+  # 生产者配置
+  producer:
+    groupName: ${spring.application.name}
+    namesrvAddr: 192.168.1.105:9876
+  # 消费者配置
+  consumer:
+    groupName: ${spring.application.name}
+    namesrvAddr: 192.168.1.105:9876
+
+server:
+  port: 7000

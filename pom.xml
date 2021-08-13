@@ -20,10 +20,8 @@
         <module>nacos-component-consumer</module>
         <module>nacos-component-provider</module>
         <module>storage-service</module>
-        <module>report-service</module>
-        <module>log-service</module>
-        <module>chain-trace-service</module>
-        <module>search-service</module>
+        <module>xxl-job-service</module>
+        <module>rocketmq-cluster-demo</module>
     </modules>
 
     <parent>

@@ -1,0 +1,40 @@
+logging:
+  file:
+    name: D:/IDEA Project/Rule/nacos-spring-cloud-demo/cache-service/logs/server.log
+  level:
+    com:
+      atguigu:
+        redis: info
+    root: warn
+  pattern:
+    console: '%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger- %msg%n '
+    file: '%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger- %msg%n'
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.rule.entities
+server:
+  port: 7777
+spring:
+  application:
+    name: cache-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    druid:
+      test-while-idle: false
+    password: 6789@jklJKL
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://rm-2vc51lt5udr60l64cco.mysql.cn-chengdu.rds.aliyuncs.com:3306/test?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: lrpyt_520
+  redis:
+    database: 0
+    host: 127.0.0.1
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 8
+        max-wait: -1ms
+        min-idle: 0
+    password: ''
+    port: 6379
+  swagger2:
+    enabled: true

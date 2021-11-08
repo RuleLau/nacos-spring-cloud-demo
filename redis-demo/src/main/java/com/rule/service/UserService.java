@@ -3,10 +3,15 @@ package com.rule.service;
 import com.rule.entities.User;
 import com.rule.mapper.UserMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import redis.clients.jedis.Jedis;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -23,6 +28,12 @@ public class UserService {
     private UserMapper userMapper;
     @Resource
     private RedisTemplate redisTemplate;
+
+    @Autowired
+    private Jedis jedis;
+
+    @Autowired
+    private RedissonClient redissonClient;
 
     public void addUser(User user)
     {
@@ -127,5 +138,47 @@ public class UserService {
         return user;
     }
 
+    public Object redisson(String key) {
+        RLock xx = redissonClient.getLock("xx");
+        xx.lock(30, TimeUnit.SECONDS);
+        try {
+            Thread.sleep(2100);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        xx.unlock();
+        return null;
+    }
+
+    public Object tryLock(String key) {
+        RLock lock = redissonClient.getLock("xx");
+        try {
+            return lock.tryLock(10, 15, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            return false;
+        }
+    }
+
+    public Object testLock(HttpServletRequest request, String key) {
+        String remoteHost = request.getRemoteHost();
+        jedis.hset(key, remoteHost, String.valueOf(1));
+//        redisTemplate.opsForHash().put();
+        jedis.expire(key, 30);
+//        redisTemplate.expire(key, 5, TimeUnit.SECONDS);
+        RLock lock = redissonClient.getLock(key);
+        lock.lock();
+        System.out.println("加锁后，剩余时间: {}"+ jedis.ttl(key));
+//        log.info("加锁后，剩余时间: {}", redisTemplate.getExpire(key));
+        try {
+            Thread.sleep(30000);
+        }catch (Exception e) {
+
+        }
+
+        System.out.println("执行完业务操作后，剩余时间: {}"+ jedis.ttl(key));
+//        log.info("执行完业务操作后，剩余时间: {}", redisTemplate.getExpire(key));
+        lock.unlock();
+        return true;
+    }
 }
 

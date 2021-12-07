@@ -1,12 +1,16 @@
 spring:
+  profiles:
+    active: test
   application:
     name: nacos-component-provider
   cloud:
     nacos:
       config:
+#        server-addr: 121.41.193.54:8848
         server-addr: 127.0.0.1:8848
-        file-extension: yaml
-        shared-configs:
-          - data-id: common.yaml
+#        file-extension: yaml
+#        shared-configs[0]: # shared-configs 这是个列表
+#          data_id: test-01.yaml
+#          refresh: true # 默认为false， 不支持动态刷新
       discovery:
         server-addr: 127.0.0.1:8848

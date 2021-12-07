@@ -1,11 +1,16 @@
 package com.rule.common.utils;
 
+import com.google.common.collect.Lists;
 import com.rule.common.annotation.Translate;
 import com.rule.common.entity.UserInfo;
 import sun.misc.BASE64Encoder;
 
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Predicate;
 
 public class Utils {
 
@@ -62,7 +67,27 @@ public class Utils {
 
 
     public static void main(String[] args) throws Exception {
-        doTranslate(new UserInfo());
+        // doTranslate(new UserInfo());
+        UserInfo userInfo1 = new UserInfo();
+        userInfo1.setId(1);
+        userInfo1.setNum(1);
+        UserInfo userInfo2 = new UserInfo();
+        userInfo2.setId(2);
+        userInfo2.setNum(2);
+        ArrayList<UserInfo> userInfos = Lists.newArrayList(userInfo1, userInfo2);
+        List<Integer> ans = new ArrayList<>();
+        userInfos.forEach(userInfo -> add(ans, e -> e.getId() > 0, userInfo));
+
+        System.out.println(Arrays.toString(ans.toArray()));
+
+
+    }
+
+    private static void add(List<Integer> ans, Predicate<UserInfo> predicate, UserInfo userInfo) {
+
+        if (predicate.test(userInfo)) {
+            ans.add(userInfo.getNum());
+        }
     }
 
 }

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @Component
-@FeignClient(value = "nacos-component-provider",fallback = ProviderServiceImpl.class)
+@FeignClient(value = "nacos-component-provider1",fallback = ProviderServiceImpl.class)
 public interface HystrixClient {
 
     @GetMapping("hystrixI/{id}")

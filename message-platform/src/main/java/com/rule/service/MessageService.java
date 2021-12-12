@@ -1,6 +1,6 @@
 package com.rule.service;
 
-import com.rule.pojo.MessageInfo;
+import com.rule.entity.MessageInfo;
 import com.rule.source.MessagePlatformSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;

@@ -1,6 +1,6 @@
 package com.rule.controller;
 
-import com.rule.pojo.MessageInfo;
+import com.rule.entity.MessageInfo;
 import com.rule.service.MessageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

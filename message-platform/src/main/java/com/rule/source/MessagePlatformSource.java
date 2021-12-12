@@ -10,6 +10,4 @@ public interface MessagePlatformSource {
 
     @Output("trek-output")
     MessageChannel trekOutput();
-
-
 }

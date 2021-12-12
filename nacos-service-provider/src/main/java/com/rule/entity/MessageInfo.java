@@ -1,4 +1,4 @@
-package com.rule.pojo;
+package com.rule.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;

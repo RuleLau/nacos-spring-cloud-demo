@@ -1,4 +1,4 @@
-package com.rule.pojo;
+package com.rule.entity;
 
 import lombok.Getter;
 import lombok.Setter;

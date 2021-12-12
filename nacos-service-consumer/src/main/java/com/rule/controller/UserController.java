@@ -1,7 +1,7 @@
 package com.rule.controller;
 
 import com.rule.mapper.UserMapper;
-import com.rule.pojo.UserInfo;
+import com.rule.entity.UserInfo;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

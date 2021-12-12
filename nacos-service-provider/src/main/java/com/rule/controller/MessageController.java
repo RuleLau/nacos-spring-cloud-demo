@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.rule.client.UserClient;
 import com.rule.mapper.MessageMapper;
-import com.rule.pojo.MessageInfo;
+import com.rule.entity.MessageInfo;
 import io.seata.spring.annotation.GlobalTransactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

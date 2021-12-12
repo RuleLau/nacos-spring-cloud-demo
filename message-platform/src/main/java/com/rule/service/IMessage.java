@@ -1,6 +1,6 @@
 package com.rule.service;
 
-import com.rule.pojo.MessageInfo;
+import com.rule.entity.MessageInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.rocketmq.common.message.MessageConst;
 import org.springframework.messaging.Message;

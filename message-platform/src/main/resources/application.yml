@@ -18,6 +18,7 @@ spring:
         # RocketMQ Binder 配置项，对应 RocketMQBinderConfigurationProperties 类
         binder:
           name-server: 127.0.0.1:9876 # RocketMQ Namesrv 地址
+          enable-msg-trace: true
         # RocketMQ 自定义 Binding 配置项，对应 RocketMQBindingProperties Map
         bindings:
           erbadagang-output:

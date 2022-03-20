@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: kafka
+## 启动加载外部 git 的配置文件
+  cloud:
+    config:
+      uri: http://localhost:8900/
+      label: master
+## 动态刷新服务配置

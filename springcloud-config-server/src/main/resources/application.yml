@@ -1,0 +1,13 @@
+server:
+  port: 8900
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://gitee.com/rule-liu/config-demo.git
+          username: xxx
+          password: xxx
+      label: master

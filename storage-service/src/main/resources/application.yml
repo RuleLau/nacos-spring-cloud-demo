@@ -1,0 +1,21 @@
+
+server:
+  port: 8081
+
+
+minio:
+  url: http://192.168.25.23:9000
+  username: admin
+  password: 12345678
+  bucketName: test
+
+spring:
+  redis:
+    host: 127.0.0.1
+    port: 6379
+
+
+  servlet:
+    multipart:
+      max-file-size: 1000MB
+      max-request-size: 1000MB

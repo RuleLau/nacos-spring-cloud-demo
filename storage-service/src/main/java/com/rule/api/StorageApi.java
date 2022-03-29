@@ -1,13 +1,28 @@
 package com.rule.api;
 
+import com.alibaba.fastjson.JSON;
 import com.rule.pojo.RspResult;
 import com.rule.service.MinioService;
+import com.rule.util.CustomMinioClient;
+import io.minio.MinioClient;
+import io.minio.ObjectWriteResponse;
+import io.minio.UploadObjectArgs;
+import io.minio.errors.ErrorResponseException;
+import io.minio.errors.InsufficientDataException;
+import io.minio.errors.InternalException;
+import io.minio.errors.InvalidResponseException;
+import io.minio.errors.ServerException;
+import io.minio.errors.XmlParserException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 @RestController
 public class StorageApi {
@@ -54,6 +69,29 @@ public class StorageApi {
 
     @Autowired
     private MinioService minioService;
+
+    @Autowired
+    private CustomMinioClient customMinioClient;
+
+    public void get(List<String> md5List,  String bucketName, String fileName, Integer partSize, Long fileSize, String mimetype, String fileExt) throws IOException, NoSuchAlgorithmException, InvalidResponseException, InvalidKeyException, ServerException, ErrorResponseException, XmlParserException, InsufficientDataException, InternalException {
+        // 前端进行分片，根据 size 分片，然后将
+        customMinioClient.uploadMultipart(bucketName, null, fileName, null, null);
+    }
+
+    public static void main(String[] args) throws Exception {
+        MinioClient minioClient = MinioClient.builder()
+                .endpoint("http://192.168.25.23:9000")
+                .credentials("admin", "12345678")
+                .build();
+        CustomMinioClient customMinioClient = new CustomMinioClient(minioClient);
+        UploadObjectArgs objectArgs = UploadObjectArgs.builder()
+                .filename("C:\\Users\\rulelau\\Desktop\\a.txt", 5 * 1024 * 1024)
+                .bucket("test")
+                .object("12222")
+                .build();
+        ObjectWriteResponse objectWriteResponse = customMinioClient.uploadObject(objectArgs);
+        System.out.println(JSON.toJSONString(objectWriteResponse));
+    }
 
     /**
      * 文件上传前注册  校验  mimetype文件类型  fileExt 文件扩展名

@@ -1,9 +1,7 @@
 package com.rule.util;
 
-import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import io.minio.CreateMultipartUploadResponse;
-import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.ListPartsResponse;
 import io.minio.MinioClient;
 import io.minio.ObjectWriteResponse;
@@ -13,17 +11,11 @@ import io.minio.errors.InternalException;
 import io.minio.errors.InvalidResponseException;
 import io.minio.errors.ServerException;
 import io.minio.errors.XmlParserException;
-import io.minio.http.Method;
 import io.minio.messages.Part;
 
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 自定义minio
@@ -39,8 +31,12 @@ public class CustomMinioClient extends MinioClient {
 
     public String initMultiPartUpload(String bucket, String region, String object, Multimap<String, String> headers, Multimap<String, String> extraQueryParams) throws IOException, InvalidKeyException, NoSuchAlgorithmException, InsufficientDataException, ServerException, InternalException, XmlParserException, InvalidResponseException, ErrorResponseException {
         CreateMultipartUploadResponse response = this.createMultipartUpload(bucket, region, object, headers, extraQueryParams);
-
         return response.result().uploadId();
+    }
+
+    public CreateMultipartUploadResponse createMultipartUpload(String bucket, String region, String object, Multimap<String, String> headers, Multimap<String, String> extraQueryParams) throws IOException, InvalidKeyException, NoSuchAlgorithmException, InsufficientDataException, ServerException, InternalException, XmlParserException, InvalidResponseException, ErrorResponseException {
+        CreateMultipartUploadResponse response = this.createMultipartUpload(bucket, region, object, headers, extraQueryParams);
+        return response;
     }
 
     public ObjectWriteResponse mergeMultipartUpload(String bucketName, String region, String objectName, String uploadId, Part[] parts, Multimap<String, String> extraHeaders, Multimap<String, String> extraQueryParams) throws IOException, InvalidKeyException, NoSuchAlgorithmException, InsufficientDataException, ServerException, InternalException, XmlParserException, InvalidResponseException, ErrorResponseException {
@@ -61,7 +57,7 @@ public class CustomMinioClient extends MinioClient {
         return this.createMultipartUpload(bucketName, region, objectName, headers, extraQueryParams);
     }
 
-    public Map<String, Object> initMultiPartUpload(String objectName, int partCount, String contentType) {
+    /*public Map<String, Object> initMultiPartUpload(String objectName, int partCount, String contentType) {
         Map<String, Object> result = new HashMap<>();
         try {
             if (StrUtil.isBlank(contentType)) {
@@ -96,5 +92,5 @@ public class CustomMinioClient extends MinioClient {
         }
 
         return result;
-    }
+    }*/
 }

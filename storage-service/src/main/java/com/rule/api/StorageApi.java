@@ -1,28 +1,33 @@
 package com.rule.api;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Multimap;
 import com.rule.pojo.RspResult;
 import com.rule.service.MinioService;
 import com.rule.util.CustomMinioClient;
+import io.minio.CreateMultipartUploadResponse;
+import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.MinioClient;
-import io.minio.ObjectWriteResponse;
-import io.minio.UploadObjectArgs;
-import io.minio.errors.ErrorResponseException;
-import io.minio.errors.InsufficientDataException;
-import io.minio.errors.InternalException;
-import io.minio.errors.InvalidResponseException;
-import io.minio.errors.ServerException;
-import io.minio.errors.XmlParserException;
+import io.minio.PostPolicy;
+import io.minio.http.Method;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @RestController
 public class StorageApi {
@@ -73,24 +78,102 @@ public class StorageApi {
     @Autowired
     private CustomMinioClient customMinioClient;
 
-    public void get(List<String> md5List,  String bucketName, String fileName, Integer partSize, Long fileSize, String mimetype, String fileExt) throws IOException, NoSuchAlgorithmException, InvalidResponseException, InvalidKeyException, ServerException, ErrorResponseException, XmlParserException, InsufficientDataException, InternalException {
+    public void get(String bucketName, String fileName, Integer partCount) throws Exception {
         // 前端进行分片，根据 size 分片，然后将
         customMinioClient.uploadMultipart(bucketName, null, fileName, null, null);
     }
 
     public static void main(String[] args) throws Exception {
         MinioClient minioClient = MinioClient.builder()
-                .endpoint("http://192.168.25.23:9000")
-                .credentials("admin", "12345678")
+                .endpoint("http://127.0.0.1:9000")
+                .credentials("minioadmin", "minioadmin")
                 .build();
         CustomMinioClient customMinioClient = new CustomMinioClient(minioClient);
-        UploadObjectArgs objectArgs = UploadObjectArgs.builder()
-                .filename("C:\\Users\\rulelau\\Desktop\\a.txt", 5 * 1024 * 1024)
-                .bucket("test")
-                .object("12222")
-                .build();
-        ObjectWriteResponse objectWriteResponse = customMinioClient.uploadObject(objectArgs);
-        System.out.println(JSON.toJSONString(objectWriteResponse));
+        //String bucket, String region, String object, Multimap<String, String> headers, Multimap<String, String> extraQueryParams
+        String uploadId = customMinioClient.initMultiPartUpload("test", null, "b.txt", null, null);
+        Map<String, String> reqParams = new HashMap<>();
+        reqParams.put("uploadId", uploadId);
+        List<String> partList = new ArrayList<>();
+        Map<String, Object> result = new HashMap<>();
+        reqParams.put("response-content-type", "application/json");
+
+        // 为存储桶创建一个上传策略，过期时间为7天
+        PostPolicy policy = new PostPolicy(bucketName, ZonedDateTime.now().plusDays(1));
+        // 设置一个参数key，值为上传对象的名称
+        policy.addEqualsCondition("key", fileName);
+        // 添加Content-Type，例如以"image/"开头，表示只能上传照片，这里吃吃所有
+        policy.addStartsWithCondition("Content-Type", MediaType.ALL_VALUE);
+        // 设置上传文件的大小 64kiB to 10MiB.
+        //policy.addContentLengthRangeCondition(64 * 1024, 10 * 1024 * 1024);
+
+
+        for (int i = 1; i <= 1; i++) {
+            reqParams.put("partNumber", String.valueOf(i));
+            String uploadUrl = customMinioClient.getPresignedObjectUrl(
+                    GetPresignedObjectUrlArgs.builder()
+                            .method(Method.PUT)
+                            .bucket("test")
+                            .object("b.txt")
+                            .expiry(60 * 60 * 24)
+                            .extraQueryParams(reqParams)
+                            .build());
+            partList.add(uploadUrl);
+        }
+        result.put("uploadUrls", partList);
+        System.out.println(JSON.toJSONString(result));
+    }
+
+    public Map<String, String> getPresignedPostFormData(String bucketName, String fileName, CustomMinioClient customMinioClient) throws Exception {
+        // 为存储桶创建一个上传策略，过期时间为7天
+        PostPolicy policy = new PostPolicy(bucketName, ZonedDateTime.now().plusDays(1));
+        // 设置一个参数key，值为上传对象的名称
+        policy.addEqualsCondition("key", fileName);
+        // 添加Content-Type，例如以"image/"开头，表示只能上传照片，这里吃吃所有
+        policy.addStartsWithCondition("Content-Type", MediaType.ALL_VALUE);
+        // 设置上传文件的大小 64kiB to 10MiB.
+        //policy.addContentLengthRangeCondition(64 * 1024, 10 * 1024 * 1024);
+        return customMinioClient.getPresignedPostFormData(policy);
+    }
+
+    public String generateOssUuidFileName(String originalFilename) {
+        return "files" + StrUtil.SLASH + DateUtil.format(new Date(), "yyyy-MM-dd") + StrUtil.SLASH + UUID.randomUUID() + StrUtil.UNDERLINE + originalFilename;
+    }
+
+    /**
+     * 上传分片上传请求，返回uploadId
+     */
+    public CreateMultipartUploadResponse uploadId(String bucketName, String region, String objectName,
+                                                  Multimap<String, String> headers, Multimap<String, String> extraQueryParams, CustomMinioClient customMinioClient) throws Exception {
+        return customMinioClient.createMultipartUpload(bucketName, region, objectName, headers, extraQueryParams);
+    }
+
+    /**
+     * 返回分片上传需要的签名数据URL及 uploadId
+     *
+     * @param bucketName
+     * @param fileName
+     * @return
+     */
+    @GetMapping("/createMultipartUpload")
+    @ResponseBody
+    public Map<String, Object> createMultipartUpload(String bucketName, String fileName, Integer chunkSize, CustomMinioClient customMinioClient) {
+        // 1. 根据文件名创建签名
+        Map<String, Object> result = new HashMap<>();
+        // 2. 获取uploadId
+        CreateMultipartUploadResponse response = uploadId(bucketName, null, fileName, null, null, customMinioClient);
+        String uploadId = response.result().uploadId();
+        result.put("uploadId", uploadId);
+        // 3. 请求Minio 服务，获取每个分块带签名的上传URL
+        Map<String, String> reqParams = new HashMap<>();
+        reqParams.put("uploadId", uploadId);
+        List<String> partList = new ArrayList<>();
+        // 4. 循环分块数 从1开始
+        for (int i = 1; i <= chunkSize; i++) {
+            reqParams.put("partNumber", String.valueOf(i));
+            String uploadUrl = customMinioClient.getPresignedObjectUrl(bucketName, fileName, reqParams);// 获取URL
+            result.put("chunk_" + (i - 1), uploadUrl); // 添加到集合
+        }
+        return result;
     }
 
     /**

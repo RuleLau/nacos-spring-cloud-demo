@@ -21,4 +21,9 @@ public class ResultMessage {
     public static final String MERGE_FAIL= "合并失败";
     public static final String MERGE_SUCCESS= "合并成功";
 
+    public static final long FILE_CHUNK_SIZE = 5 * 1024 * 1024;
+
+    public static final int UPLOAD_SUCCESS = 1;
+    public static final int UPLOAD_PROCESS = 2;
+    public static final int UPLOAD_FAILED = 3;
 }

@@ -2,30 +2,21 @@ package com.rule.api;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
-import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Multimap;
 import com.rule.pojo.RspResult;
 import com.rule.service.MinioService;
 import com.rule.util.CustomMinioClient;
 import io.minio.CreateMultipartUploadResponse;
-import io.minio.GetPresignedObjectUrlArgs;
-import io.minio.MinioClient;
 import io.minio.PostPolicy;
-import io.minio.http.Method;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -83,7 +74,7 @@ public class StorageApi {
         customMinioClient.uploadMultipart(bucketName, null, fileName, null, null);
     }
 
-    public static void main(String[] args) throws Exception {
+/*    public static void main(String[] args) throws Exception {
         MinioClient minioClient = MinioClient.builder()
                 .endpoint("http://127.0.0.1:9000")
                 .credentials("minioadmin", "minioadmin")
@@ -121,7 +112,7 @@ public class StorageApi {
         }
         result.put("uploadUrls", partList);
         System.out.println(JSON.toJSONString(result));
-    }
+    }*/
 
     public Map<String, String> getPresignedPostFormData(String bucketName, String fileName, CustomMinioClient customMinioClient) throws Exception {
         // 为存储桶创建一个上传策略，过期时间为7天
@@ -154,7 +145,7 @@ public class StorageApi {
      * @param fileName
      * @return
      */
-    @GetMapping("/createMultipartUpload")
+/*    @GetMapping("/createMultipartUpload")
     @ResponseBody
     public Map<String, Object> createMultipartUpload(String bucketName, String fileName, Integer chunkSize, CustomMinioClient customMinioClient) {
         // 1. 根据文件名创建签名
@@ -168,13 +159,13 @@ public class StorageApi {
         reqParams.put("uploadId", uploadId);
         List<String> partList = new ArrayList<>();
         // 4. 循环分块数 从1开始
-        for (int i = 1; i <= chunkSize; i++) {
-            reqParams.put("partNumber", String.valueOf(i));
-            String uploadUrl = customMinioClient.getPresignedObjectUrl(bucketName, fileName, reqParams);// 获取URL
-            result.put("chunk_" + (i - 1), uploadUrl); // 添加到集合
-        }
+//        for (int i = 1; i <= chunkSize; i++) {
+//            reqParams.put("partNumber", String.valueOf(i));
+//            String uploadUrl = customMinioClient.getPresignedObjectUrl(bucketName, fileName, reqParams);// 获取URL
+//            result.put("chunk_" + (i - 1), uploadUrl); // 添加到集合
+//        }
         return result;
-    }
+    }*/
 
     /**
      * 文件上传前注册  校验  mimetype文件类型  fileExt 文件扩展名

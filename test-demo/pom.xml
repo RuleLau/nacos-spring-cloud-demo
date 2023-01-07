@@ -26,6 +26,11 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>javacv-platform</artifactId>
+            <version>1.5.8</version>
+        </dependency>
+        <dependency>
             <groupId>com.rule</groupId>
             <artifactId>custom-json-springboot-starter</artifactId>
             <version>0.0.1-SNAPSHOT</version>

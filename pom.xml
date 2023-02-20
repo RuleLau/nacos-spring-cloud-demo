@@ -23,6 +23,7 @@
         <module>xxl-job-service</module>
         <module>rocketmq-cluster-demo</module>
         <module>cloud-sentinel</module>
+        <module>ddd-demo</module>
     </modules>
 
     <parent>

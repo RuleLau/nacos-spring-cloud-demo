@@ -22,7 +22,8 @@ public interface TaskRepository extends CrudRepository<Task, Integer> {
     @Query(" update Task set successCount = successCount + :successCount, "
             + " pendingCount = pendingCount + :pendingCount, "
             + " failCount = failCount + :failCount,  "
-            + " taskStatus = (case when successCount + failCount = totalCount then 'FINISHED' else 'PROCESSING' end) "
+            + " taskStatus = (case when successCount + failCount = totalCount then 'FINISHED' else 'PROCESSING' end), "
+            + " endDatetime = (case when taskStatus = 'FINISHED' then current_timestamp else endDatetime end) "
             + " where taskNo = :taskNo")
     @Modifying
     int updateTaskInfo(@Param("taskNo") Integer taskNo, @Param("pendingCount") Integer pendingCount,

@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -27,8 +28,17 @@ public class TaskTrigger {
     private TaskTriggerPoolHelper taskTriggerPoolHelper;
 
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
-    public void trigger(Task task, List<Manager> pendingManagers) {
+    public void trigger(Task task) {
+
         Integer taskNo = task.getTaskNo();
+
+        List<Manager> pendingManagers = managerRepository.selectTopManagers(task.getTaskNo());
+
+        if (CollectionUtils.isEmpty(pendingManagers)) {
+//            taskRepository.finishTask(task.getTaskNo());
+            log.info("pending manager size: {}", pendingManagers.size());
+            return;
+        }
 
         log.info(">>>>>>>>>>> process trigger start, taskNo:{}, pending manager size: {}", taskNo, pendingManagers.size());
 
@@ -42,7 +52,7 @@ public class TaskTrigger {
                 managerRepository.save(pendingManager);
                 successCount++;
             } catch (Exception e) {
-                log.error("update manager failed, and error: {}", e);
+                log.error("update manager failed, and error: ", e);
                 failCount++;
             }
         }

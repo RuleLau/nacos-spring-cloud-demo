@@ -3,13 +3,14 @@ package com.rule.service;
 import com.rule.event.TaskEvent;
 import com.rule.po.Manager;
 import com.rule.po.Task;
-import com.rule.repository.ManagerRepository;
 import com.rule.repository.TaskRepository;
-import com.rule.thread.TaskTriggerPoolHelper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronizationAdapter;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
@@ -17,6 +18,7 @@ import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.List;
 
@@ -24,6 +26,7 @@ import static com.rule.constant.TaskConstant.MANAGER_PARTITION_SIZE;
 import static com.rule.constant.TaskConstant.TASK_ODOMETER_NAME;
 
 @Service
+@Slf4j
 public class StoreService {
 
     @Resource
@@ -35,32 +38,40 @@ public class StoreService {
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Resource
-    private ManagerRepository managerRepository;
-
     @Autowired
     private DataSource dataSource;
 
     @Autowired
-    private TaskTriggerPoolHelper taskTriggerPoolHelper;
-
-    @Autowired
     private ApplicationEventPublisher eventPublisher;
 
+
+    @Transactional(rollbackFor = Exception.class)
+    public Integer getTaskNo() {
+        return taskOdometerService.getTaskNo(TASK_ODOMETER_NAME);
+    }
 
     /**
      * 单线程 entity manager load 数据 105769 ms
      * 单线程 repository load 数据 107720 ms
      */
     @Transactional(rollbackFor = Exception.class)
-    public Integer loadToDbByEm(List<Manager> managerList) {
-        Integer taskNo = taskOdometerService.getTaskNo(TASK_ODOMETER_NAME);
+    public Integer loadToDbByEm(List<Manager> managerList, Integer taskNo) {
+
+        log.info("start load managers, taskNo: {}", taskNo);
 
         saveManagersAndTask(managerList, taskNo);
 
         TaskEvent taskEvent = new TaskEvent(this, taskNo);
 
-        eventPublisher.publishEvent(taskEvent);
+        log.info("taskNo: {}, load managers finished.", taskNo);
+
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
+            @Override
+            public void afterCommit() {
+                eventPublisher.publishEvent(taskEvent);
+                ;
+            }
+        });
 
         return taskNo;
     }
@@ -134,6 +145,7 @@ public class StoreService {
         Task managerTask = new Task();
         managerTask.setTaskNo(taskNo);
         managerTask.setTaskStatus("PENDING");
+        managerTask.setStartDatetime(LocalDateTime.now());
         return managerTask;
     }
 }

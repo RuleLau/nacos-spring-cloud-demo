@@ -31,4 +31,44 @@ public class Manager implements Serializable {
      */
     @Column(name = "process_status")
     private String processStatus;
+
+    public int getOid() {
+        return oid;
+    }
+
+    public void setOid(int oid) {
+        this.oid = oid;
+    }
+
+    public int getTaskNo() {
+        return taskNo;
+    }
+
+    public void setTaskNo(int taskNo) {
+        this.taskNo = taskNo;
+    }
+
+    public Long getUserid() {
+        return userid;
+    }
+
+    public void setUserid(Long userid) {
+        this.userid = userid;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getProcessStatus() {
+        return processStatus;
+    }
+
+    public void setProcessStatus(String processStatus) {
+        this.processStatus = processStatus;
+    }
 }

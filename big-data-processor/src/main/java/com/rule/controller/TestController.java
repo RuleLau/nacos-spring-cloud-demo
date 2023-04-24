@@ -24,10 +24,18 @@ public class TestController {
 
         long startTime = System.currentTimeMillis();
 
-        storeService.loadToDbByEm(managerList);
+        Integer taskNo = storeService.getTaskNo();
+
+        storeService.loadToDbByEm(managerList, taskNo);
 
         return System.currentTimeMillis() - startTime;
     }
+
+    @GetMapping("/getTaskNo")
+    public int getTaskNo() {
+        return storeService.getTaskNo();
+    }
+
 
     private List<Manager> getManagerList(int dataSize) {
         List<Manager> managerList = new ArrayList<>(dataSize);

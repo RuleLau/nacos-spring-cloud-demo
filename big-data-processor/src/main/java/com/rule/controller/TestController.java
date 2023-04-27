@@ -61,4 +61,14 @@ public class TestController {
         return System.currentTimeMillis() - startTime;
     }
 
+
+    @GetMapping("/different/schema")
+    public long differentDbSchema() {
+
+        long startTime = System.currentTimeMillis();
+
+        storeService.differentDbSchema();
+
+        return System.currentTimeMillis() - startTime;
+    }
 }

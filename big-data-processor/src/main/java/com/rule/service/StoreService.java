@@ -3,7 +3,10 @@ package com.rule.service;
 import com.rule.event.TaskEvent;
 import com.rule.po.Manager;
 import com.rule.po.Task;
+import com.rule.po.User;
+import com.rule.repository.ManagerRepository;
 import com.rule.repository.TaskRepository;
+import com.rule.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -44,6 +47,11 @@ public class StoreService {
     @Autowired
     private ApplicationEventPublisher eventPublisher;
 
+    @Resource
+    private UserRepository userRepository;
+
+    @Resource
+    private ManagerRepository managerRepository;
 
     @Transactional(rollbackFor = Exception.class)
     public Integer getTaskNo() {
@@ -147,5 +155,22 @@ public class StoreService {
         managerTask.setTaskStatus("PENDING");
         managerTask.setStartDatetime(LocalDateTime.now());
         return managerTask;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void differentDbSchema() {
+        User user = new User();
+        user.setUsername(System.currentTimeMillis()+"");
+        user.setPassword("123456");
+        user.setAuthorities("admin");
+        userRepository.save(user);
+
+        Manager manager = new Manager();
+        manager.setUserid(System.currentTimeMillis());
+        manager.setName("name-" + manager.getUserid());
+        manager.setProcessStatus("PENDING");
+        managerRepository.save(manager);
+
+        int a = 1/0;
     }
 }

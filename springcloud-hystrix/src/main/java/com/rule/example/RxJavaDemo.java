@@ -15,15 +15,15 @@ public class RxJavaDemo {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         final String[] datas = new String[]{"登录"};
 
-        final Action0 onComplated = () -> System.out.println("on Complated: observable");
+        final Action0 onCompleted = () -> System.out.println("on onCompleted: observable");
         //老师（被观察者）
         Observable<String> observable = Observable.defer((Func0<Observable<String>>) () -> {
             Observable observable1 = Observable.from(datas);
 //            int a = 1 / 0;
-            return observable1.doOnCompleted(onComplated);
+            return observable1.doOnCompleted(onCompleted);
         });
         //学生(观察者)
-        Observer observer = new Observer() {
+        Observer<String> observer = new Observer<String>() {
             @Override
             public void onCompleted() {
                 System.out.println("Observer: onCompleted");
@@ -35,14 +35,14 @@ public class RxJavaDemo {
             }
 
             @Override
-            public void onNext(Object o) {
+            public void onNext(String o) {
                 System.out.println("on Next:" + o);
             }
         };
         observable.subscribe(observer); //建立订阅关系
 
         String s = observable.toBlocking().toFuture().get();//建立订阅关系
-        observer.onCompleted();
-        System.out.println(s);
+//        observer.onCompleted();
+//        System.out.println(s);
     }
 }

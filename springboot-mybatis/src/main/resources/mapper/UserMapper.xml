@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rule.mapper.UserDao">
+    <!--设置SQL查询结果每个字段和domain中City属性的对应关系
+        如果没有该配置项，就要求City.java的属性和SQL字段名称完全相同-->
+    <resultMap id="BaseResultMap" type="com.rule.entity.User">
+        <result column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="authorities" property="authorities"/>
+    </resultMap>
+
+    <!--id和Dao中接口方法名称一一对应-->
+    <select id="findByNameList" resultMap="BaseResultMap" parameterType="java.util.List">
+        select
+        id, username, password, authorities
+        from t_user
+        where username in
+        <foreach collection="nameList" separator="," item="item" open="(" close=")">
+            #{item}
+        </foreach>
+    </select>
+</mapper>

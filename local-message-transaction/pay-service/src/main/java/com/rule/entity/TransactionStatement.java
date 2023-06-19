@@ -9,28 +9,23 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Version;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+/*
+ * 交易流水表
+ * */
 @Entity
 @Data
-@Table(catalog = "order", name = "part_order")
-public class PartOrder {
+@Table(catalog = "pay", name = "transaction_statement")
+public class TransactionStatement {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "oid")
     private Long oid;
 
-    @Column(name = "sku_no")
-    private Integer skuNo;
-
-    @Column(name = "quantity")
-    private Integer quantity;
-
-    // 单价
-    @Column(name = "price")
-    private BigDecimal price;
+    @Column(name = "order_no")
+    private Integer orderNo;
 
     @Column(name = "entry_id")
     private Integer entryId;

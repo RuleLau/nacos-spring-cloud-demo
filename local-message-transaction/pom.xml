@@ -12,6 +12,7 @@
         <module>common</module>
         <module>order-service</module>
         <module>pay-service</module>
+        <module>event-service</module>
     </modules>
 
     <parent>

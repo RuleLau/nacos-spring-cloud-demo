@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: event-service
+
+  datasource:
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/mq?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+  kafka:
+    bootstrap-servers: 127.0.0.1:9092
+    producer:
+      acks: 1 # 应答级别:多少个分区副本备份完成时向生产者发送ack确认(可选0、1、all/-1)
+      # 序列化key的类
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      # 序列化value的类
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      group-id: event-service
+      enable-auto-commit: true
+      auto-commit-interval: 3000
+      # 序列化key的类
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      # 序列化value的类
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+# kafka
+kafka:
+  partNum: 3
+  repeatNum: 1
+  topic: order
+server:
+  port: 6000

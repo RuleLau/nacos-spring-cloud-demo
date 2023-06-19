@@ -14,23 +14,16 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-@Table(catalog = "order", name = "part_order")
-public class PartOrder {
+@Table(catalog = "pay", name = "user_balance")
+public class UserBalance {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "oid")
     private Long oid;
 
-    @Column(name = "sku_no")
-    private Integer skuNo;
-
-    @Column(name = "quantity")
-    private Integer quantity;
-
-    // 单价
-    @Column(name = "price")
-    private BigDecimal price;
+    @Column(name = "balance")
+    private BigDecimal balance;
 
     @Column(name = "entry_id")
     private Integer entryId;

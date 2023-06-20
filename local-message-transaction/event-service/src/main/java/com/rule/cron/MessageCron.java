@@ -18,7 +18,7 @@ public class MessageCron {
     @Autowired
     private MessageRepository messageRepository;
 
-    //    @Autowired
+        @Autowired
     private MessageSender messageSender;
 
     @Scheduled(initialDelay = 1000L, fixedRate = 3000L)
@@ -37,7 +37,7 @@ public class MessageCron {
         } finally {
             // delete
             log.error("delete message list");
-//            messageRepository.deleteAll(deleteMessages);
+            messageRepository.deleteAll(deleteMessages);
         }
     }
 

@@ -35,7 +35,7 @@ public class PayService {
     @PostMapping("/deduceUserBalance")
     @Transactional
     @ApiOperation("扣减用户余额")
-    public void deduceUserBalance(@RequestBody EventMessage eventMessage) {
+    public String deduceUserBalance(@RequestBody EventMessage eventMessage) {
 
         String payload = eventMessage.getPayload();
         PartOrderDTO partOrderDTO = JSON.parseObject(payload, PartOrderDTO.class);
@@ -51,13 +51,14 @@ public class PayService {
         Integer entryId = partOrderDTO.getEntryId();
         int update = userBalanceRepository.deduceUserBalance(entryId, total);
         if (update == 0) {
-            log.error("扣款不成功!");
+            return "扣款不成功!";
         } else {
             TransactionStatement transactionStatement = new TransactionStatement();
             transactionStatement.setOrderNo(orderNo);
             transactionStatement.setEntryId(entryId);
             transactionStatement.setEntryDatetime(LocalDateTime.now());
             transactionStatementRepository.save(transactionStatement);
+            return "扣款成功！";
         }
     }
 

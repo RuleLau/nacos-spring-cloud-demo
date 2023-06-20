@@ -36,11 +36,13 @@ public class OrderService {
         PartOrder partOrder = new PartOrder();
         partOrder.setSkuNo(orderDTO.getSkuNo());
         partOrder.setQuantity(orderDTO.getQuantity());
+        partOrder.setPrice(orderDTO.getPrice());
         partOrder.setEntryId(orderDTO.getEntryId());
         partOrder.setEntryDatetime(LocalDateTime.now());
         //
         PartOrder saveOrder = orderRepository.save(partOrder);
 
+        // 发送扣款消息
         EventMessage eventMessage = new EventMessage();
         eventMessage.setMessageId(UUID.randomUUID().toString());
         eventMessage.setEventName("PAY_SERVICE_DEDUCE");
@@ -49,7 +51,6 @@ public class OrderService {
         eventMessage.setEntryId(partOrder.getEntryId());
         eventMessage.setEntryDatetime(LocalDateTime.now());
         messageRepository.save(eventMessage);
-
     }
 
 }

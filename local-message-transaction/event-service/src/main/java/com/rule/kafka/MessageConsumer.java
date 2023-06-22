@@ -10,7 +10,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -26,7 +25,7 @@ public class MessageConsumer {
         return new RestTemplate();
     }
 
-    @KafkaListener(topics = "order", groupId = "event-service")
+//    @KafkaListener(topics = "order", groupId = "event-service")
     public void receive1(ConsumerRecord<String, String> consumerRecord) {
         String value = consumerRecord.value();
         try {

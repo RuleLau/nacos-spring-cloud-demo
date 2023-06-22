@@ -3,13 +3,18 @@ server:
 
 spring:
   application:
-    name: order-service
+    name: pay-service
+  profiles:
+    include: common
   datasource:
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/pay?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
-
+kafka:
+  topic: UPDATE_ORDER_STATUS
+  partNum: 3
+  repeatNum: 1
   jpa:
     properties:
       hibernate:

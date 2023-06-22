@@ -1,6 +1,7 @@
-package com.rule.kafka;
+package com.rule.config;
 
 import com.alibaba.fastjson.JSON;
+import com.rule.dao.MessageRepository;
 import com.rule.entity.EventMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.AdminClient;
@@ -39,6 +40,9 @@ public class MessageSender {
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
+    @Autowired
+    private MessageRepository messageRepository;
+
     @PostConstruct
     public void createTopic() {
         // 创建topic
@@ -53,7 +57,8 @@ public class MessageSender {
 
     public void send(EventMessage eventMessage) {
         // 发送消息
-        ListenableFuture<SendResult<String, String>> future = kafkaTemplate.send(topic, JSON.toJSONString(eventMessage));
+        String eventName = eventMessage.getEventName();
+        ListenableFuture<SendResult<String, String>> future = kafkaTemplate.send(eventName, JSON.toJSONString(eventMessage));
         future.addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
             @Override
             public void onFailure(Throwable throwable) {
@@ -61,9 +66,10 @@ public class MessageSender {
             }
 
             @Override
-            public void onSuccess(SendResult<String, String> stringObjectSendResult) {
+            public void onSuccess(SendResult<String, String> result) {
                 log.info("Produce: The message was sent successfully:");
-                log.info("Produce: _+_+_+_+_+_+_+ result: " + stringObjectSendResult.toString());
+                messageRepository.deleteById(eventMessage.getMessageId());
+                log.info("Produce: _+_+_+_+_+_+_+ result: " + result.toString());
             }
         });
     }

@@ -28,6 +28,12 @@ public class PartOrder {
     @Column(name = "quantity")
     private Integer quantity;
 
+    /*
+     * 未支付/支付中/已完成
+     * */
+    @Column(name = "order_status")
+    private String orderStatus;
+
     // 单价
     @Column(name = "price")
     private BigDecimal price;

@@ -27,6 +27,9 @@ public class TransactionStatement {
     @Column(name = "order_no")
     private Integer orderNo;
 
+    @Column(name = "pay_status")
+    private String payStatus;
+
     @Column(name = "entry_id")
     private Integer entryId;
     @Column(name = "entry_datetime")

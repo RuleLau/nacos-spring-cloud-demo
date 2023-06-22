@@ -1,8 +1,8 @@
 package com.rule.cron;
 
+import com.rule.config.MessageSender;
 import com.rule.dao.MessageRepository;
 import com.rule.entity.EventMessage;
-import com.rule.kafka.MessageSender;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -18,10 +18,10 @@ public class MessageCron {
     @Autowired
     private MessageRepository messageRepository;
 
-        @Autowired
+    @Autowired
     private MessageSender messageSender;
 
-    @Scheduled(initialDelay = 1000L, fixedRate = 3000L)
+    @Scheduled(initialDelay = 1000L, fixedRate = 60000L)
     public void scanEventMessage() {
 
         List<EventMessage> eventMessages = messageRepository.queryPrepareSendMessage();
@@ -36,8 +36,8 @@ public class MessageCron {
             }
         } finally {
             // delete
-            log.error("delete message list");
-            messageRepository.deleteAll(deleteMessages);
+            log.info("delete message list");
+//            messageRepository.deleteAll(deleteMessages);
         }
     }
 

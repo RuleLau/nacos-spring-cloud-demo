@@ -1,12 +1,9 @@
 spring:
-  application:
-    name: event-service
-
-  datasource:
-    username: root
-    password: 123456
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/mq?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+  #  datasource:
+  #    username: root
+  #    password: 123456
+  #    driver-class-name: com.mysql.cj.jdbc.Driver
+  #    url: jdbc:mysql://127.0.0.1:3306/mq?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
   kafka:
     bootstrap-servers: 192.168.25.23:9092
     producer:
@@ -23,9 +20,3 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       # 序列化value的类
       value-serializer: org.apache.kafka.common.serialization.StringDeserializer
-kafka:
-  topic: DEFAULT_TOPIC
-  partNum: 3
-  repeatNum: 1
-server:
-  port: 5000

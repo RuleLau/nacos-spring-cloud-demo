@@ -1,0 +1,27 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: gateway2
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+        username: nacos
+        password: nacos
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: provider-router
+          uri: lb://provider-service
+          predicates:
+            - Path=/provider-service/**
+        - id: consumer-router
+          uri: lb://consumer-service
+          predicates:
+            - Path=/consumer-service/**
+          ### StripPrefix参数表示在将请求发送到下游之前从请求中剥离的路径个数。
+          filters:
+            - StripPrefix=1

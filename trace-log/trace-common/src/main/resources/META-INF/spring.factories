@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.rule.demo.FeignConfig,\
+  com.rule.demo.TraceIdFilter
